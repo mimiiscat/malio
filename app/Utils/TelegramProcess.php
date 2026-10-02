@@ -18,6 +18,7 @@
             '?sub=3' => 'V2ray订阅',
             '?sub=5' => 'Shadowrocket',
             '?sub=4' => 'Kitsunebi or V2rayNG or BifrostV',
+            '?sub=6' => 'Hysteria2订阅',
             '?surge=2' => 'Surge 2.x',
             '?surge=3' => 'Surge 3.x',
             '?ssd=1' => 'SSD',

@@ -282,6 +282,33 @@ class AppURI
                     'sni'         => $item['host']
                 ];
                 break;
+            case 'hysteria2':
+                $return = [
+                    'name'     => $item['remark'],
+                    'type'     => 'hysteria2',
+                    'server'   => $item['address'],
+                    'port'     => $item['port'],
+                    'password' => $item['passwd']
+                ];
+                if (!empty($item['host']) && $item['host'] != $item['address']) {
+                    $return['sni'] = $item['host'];
+                }
+                if (!empty($item['insecure'])) {
+                    $return['skip-cert-verify'] = true;
+                }
+                if (!empty($item['obfs'])) {
+                    $return['obfs'] = $item['obfs'];
+                    if (!empty($item['obfs_password'])) {
+                        $return['obfs-password'] = $item['obfs_password'];
+                    }
+                }
+                if (!empty($item['up'])) {
+                    $return['up'] = $item['up'] . ' Mbps';
+                }
+                if (!empty($item['down'])) {
+                    $return['down'] = $item['down'] . ' Mbps';
+                }
+                break;
         }
         return $return;
     }
@@ -363,7 +390,45 @@ class AppURI
                 $return  = ('trojan://' . $item['passwd'] . '@' . $item['address'] . ':' . $item['port']);
                 $return .= ('?peer=' . $item['host'] . '#' . rawurlencode($item['remark']));
                 break;
+            case 'hysteria2':
+                $return = self::getHysteria2URI($item);
+                break;
         }
+        return $return;
+    }
+
+    /**
+     * Hysteria2 分享链接
+     *
+     * @param array $item
+     *
+     * @return string
+     */
+    public static function getHysteria2URI(array $item)
+    {
+        if ($item['type'] != 'hysteria2') {
+            return null;
+        }
+
+        $query = [];
+        if (!empty($item['host']) && $item['host'] != $item['address']) {
+            $query['sni'] = $item['host'];
+        }
+        if (!empty($item['insecure'])) {
+            $query['insecure'] = 1;
+        }
+        if (!empty($item['obfs'])) {
+            $query['obfs'] = $item['obfs'];
+            if (!empty($item['obfs_password'])) {
+                $query['obfs-password'] = $item['obfs_password'];
+            }
+        }
+
+        $return = ('hysteria2://' . rawurlencode($item['passwd']) . '@' . $item['address'] . ':' . $item['port']);
+        if (count($query) > 0) {
+            $return .= ('/?' . http_build_query($query, '', '&', PHP_QUERY_RFC3986));
+        }
+        $return .= ('#' . rawurlencode($item['remark']));
         return $return;
     }
 

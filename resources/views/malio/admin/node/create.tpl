@@ -24,6 +24,7 @@
                                     <input class="form-control maxwidth-edit" id="server" type="text" name="server">
                                     <p class="form-control-guide"><i class="material-icons">info</i>如果填写为域名，“节点IP”会自动设置为解析的IP
                                     </p>
+                                    <p class="form-control-guide"><i class="material-icons">info</i>Hysteria2 节点格式：<code>地址;port=443|sni=example.com|insecure=1|obfs=salamander|obfs-password=xxx|up=100|down=100</code>，除地址外均可省略；auth=passwd 可用用户连接密码作为认证密码</p>
                                 </div>
 
                                 <div class="form-group form-group-label">
@@ -113,6 +114,7 @@
                                             <option value="12">V2Ray 中转</option>
                                             <option value="13">Shadowsocks V2Ray-Plugin</option>
                                             <option value="14">Trojan</option>
+                                            <option value="15">Hysteria2</option>
                                         </select>
                                     </div>
                                 </div>

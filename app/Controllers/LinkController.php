@@ -136,7 +136,7 @@ class LinkController extends BaseController
                 if ($query_value != '0' && $query_value != '') {
                     // 兼容代码开始
                     if ($key == 'sub' && $query_value > 3) {
-                        $query_value = 1;
+                        $query_value = ($query_value == 6 ? 6 : 1);
                     }
                     if ($key == 'surge' && $query_value == '1') {
                         $key = 'list';
@@ -256,6 +256,12 @@ class LinkController extends BaseController
             case 'sub':
                 if ((int) $value == 3) {
                     $return = self::getSubscribeExtend('v2rayn');
+                } elseif ((int) $value == 6) {
+                    $return = [
+                        'filename' => 'Hysteria2',
+                        'suffix'   => 'txt',
+                        'class'    => 'Sub'
+                    ];
                 } elseif ((int) $value == 2) {
                     $return = self::getSubscribeExtend('ss');
                 } else {
@@ -307,6 +313,14 @@ class LinkController extends BaseController
                     'filename' => 'V2RayN',
                     'suffix'   => 'txt',
                     'class'    => 'Sub'
+                ];
+                break;
+            case 'hysteria2':
+            case 'hy2':
+                $return = [
+                    'filename' => 'Hysteria2',
+                    'suffix'   => 'txt',
+                    'class'    => 'Lists'
                 ];
                 break;
             case 'kitsunebi':
@@ -512,6 +526,7 @@ class LinkController extends BaseController
             'ss'              => '?sub=2',
             'ssr'             => '?sub=1',
             'v2ray'           => '?sub=3',
+            'hysteria2'       => '?sub=6',
             // apps
             'ssa'             => '?list=ssa',
             'ssd'             => '?ssd=1',
@@ -582,6 +597,10 @@ class LinkController extends BaseController
                 break;
             case 'shadowrocket':
                 $return = AppURI::getShadowrocketURI($item);
+                break;
+            case 'hysteria2':
+            case 'hy2':
+                $return = AppURI::getHysteria2URI($item);
                 break;
         }
         return $return;
@@ -1480,6 +1499,10 @@ class LinkController extends BaseController
             case 2: // SS
                 $Rule['type'] = 'ss';
                 $getListExtend = $Rule['extend'] ? self::getListExtend($user, 'ss') : [];
+                break;
+            case 6: // Hysteria2
+                $Rule['type'] = 'hysteria2';
+                $getListExtend = [];
                 break;
             case 3: // V2
                 $Rule['type'] = 'vmess';

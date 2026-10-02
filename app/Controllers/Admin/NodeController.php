@@ -60,7 +60,7 @@ class NodeController extends AdminController
             $req_node_ip = $node->server;
         }
 
-        if (in_array($node->sort, array(0, 1, 10, 11, 12, 13))) {
+        if (in_array($node->sort, array(0, 1, 10, 11, 12, 13, 15))) {
             $server_list = explode(';', $node->server);
             if (!Tools::is_ip($server_list[0])) {
                 $node->node_ip = gethostbyname($server_list[0]);
@@ -145,7 +145,7 @@ class NodeController extends AdminController
         }
 
         $success = true;
-        if (in_array($node->sort, array(0, 1, 10, 11, 12, 13))) {
+        if (in_array($node->sort, array(0, 1, 10, 11, 12, 13, 15))) {
             $server_list = explode(';', $node->server);
             if (!Tools::is_ip($server_list[0])) {
                 $success = $node->changeNodeIp($server_list[0]);
@@ -281,7 +281,7 @@ class NodeController extends AdminController
         });
 
         $datatables->edit('outaddress', static function ($data) {
-            return (in_array($data['sort'], [0, 10, 11, 12, 13, 14]) ? explode(';', $data['server'])[0] : '');
+            return (in_array($data['sort'], [0, 10, 11, 12, 13, 14, 15]) ? explode(';', $data['server'])[0] : '');
         });
 
         $datatables->edit('node_bandwidth', static function ($data) {
@@ -324,6 +324,9 @@ class NodeController extends AdminController
                     break;
                 case 14:
                     $sort = 'Trojan';
+                    break;
+                case 15:
+                    $sort = 'Hysteria2';
                     break;
                 default:
                     $sort = '系统保留';

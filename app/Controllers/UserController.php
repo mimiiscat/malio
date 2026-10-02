@@ -493,7 +493,7 @@ class UserController extends BaseController
                 if ($log['node_id'] != $node->id) {
                     continue;
                 }
-                if (in_array($sort, array(0, 7, 8, 10, 11, 12, 13, 14))) {
+                if (in_array($sort, array(0, 7, 8, 10, 11, 12, 13, 14, 15))) {
                     $array_node['online_user'] = $log['online_user'];
                 } else {
                     $array_node['online_user'] = -1;
@@ -505,7 +505,7 @@ class UserController extends BaseController
             // 0: new node; -1: offline; 1: online
             $node_heartbeat = $node->node_heartbeat + 300;
             $array_node['online'] = -1;
-            if (!in_array($sort, array(0, 7, 8, 10, 11, 12, 13, 14)) || $node_heartbeat == 300) {
+            if (!in_array($sort, array(0, 7, 8, 10, 11, 12, 13, 14, 15)) || $node_heartbeat == 300) {
                 $array_node['online'] = 0;
             } elseif ($node_heartbeat > time()) {
                 $array_node['online'] = 1;
@@ -600,7 +600,7 @@ class UserController extends BaseController
                 }
 
 
-                if (in_array($node->sort, array(0, 7, 8, 10, 11, 12, 13))) {
+                if (in_array($node->sort, array(0, 7, 8, 10, 11, 12, 13, 15))) {
                     $node_tempalive = $node->getOnlineUserCount();
                     $node_prealive[$node->id] = $node_tempalive;
                     if ($node->isNodeOnline() !== null) {
@@ -733,6 +733,11 @@ class UserController extends BaseController
                 }
                 break;
             case 14:
+                if ((($user->class >= $node->node_class && ($user->node_group == $node->node_group || $node->node_group == 0)) || $user->is_admin) && ($node->node_bandwidth_limit == 0 || $node->node_bandwidth < $node->node_bandwidth_limit)) {
+                    return $this->view()->assign('node', $node)->assign('user', $user)->registerClass('URL', URL::class)->display('user/nodeinfo.tpl');
+                }
+                break;
+            case 15:
                 if ((($user->class >= $node->node_class && ($user->node_group == $node->node_group || $node->node_group == 0)) || $user->is_admin) && ($node->node_bandwidth_limit == 0 || $node->node_bandwidth < $node->node_bandwidth_limit)) {
                     return $this->view()->assign('node', $node)->assign('user', $user)->registerClass('URL', URL::class)->display('user/nodeinfo.tpl');
                 }

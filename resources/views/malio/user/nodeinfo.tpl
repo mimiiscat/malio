@@ -68,6 +68,10 @@
         <li class="nav-item">
           <a class="nav-link" id="trojan-tab" data-toggle="tab" href="#trojan" role="tab" aria-controls="trojan" aria-selected="true">Trojan</a>
         </li>
+        {elseif $node->sort == 15}
+        <li class="nav-item">
+          <a class="nav-link active" id="hysteria2-tab" data-toggle="tab" href="#hysteria2" role="tab" aria-controls="hysteria2" aria-selected="true">Hysteria2</a>
+        </li>
         {elseif (in_array("ssr",$malio_config['support_sub_type']))}
         {if $node->mu_only != 1}
         <li class="nav-item">
@@ -115,6 +119,35 @@
                   {if $sort14Node['host'] != $sort14Node['address']}
                       <p>HOST&PEER：<code class="card-tag tag-green">{$sort14Node['host']}</code></p>
                   {/if}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {elseif $node->sort == 15}
+        <div class="tab-pane fade active show" id="hysteria2" role="tabpanel" aria-labelledby="hysteria2-tab">
+          <div class="row mt-2">
+            <div class="col-12 col-sm-3 col-md-3">
+              <ul class="nav nav-pills flex-column" id="myTab4" role="tablist">
+                <li class="nav-item">
+                  <a class="nav-link active" id="hysteria2-info-tab" data-toggle="tab" href="#hysteria2-info" role="tab" aria-controls="hysteria2-info" aria-selected="true">信息</a>
+                </li>
+              </ul>
+            </div>
+            <div class="col-12 col-sm-9 col-md-9">
+              <div class="tab-content no-padding" id="myTab2Content">
+                <div class="tab-pane fade active show" id="hysteria2-info" role="tabpanel" aria-labelledby="hysteria2-info-tab">
+                  {$hysteria2Node = URL::getHysteria2Item($user, $node, false)}
+                  <p>服务器地址：<code class="card-tag tag-blue">{$hysteria2Node['address']}</code></p>
+                  <p>服务器端口：<code class="card-tag tag-volcano">{$hysteria2Node['port']}</code></p>
+                  <p>密码：<code class="card-tag tag-geekblue">{$hysteria2Node['passwd']}</code></p>
+                  {if $hysteria2Node['host'] != $hysteria2Node['address']}
+                      <p>SNI：<code class="card-tag tag-green">{$hysteria2Node['host']}</code></p>
+                  {/if}
+                  {if $hysteria2Node['obfs'] != ''}
+                      <p>混淆：<code class="card-tag tag-gold">{$hysteria2Node['obfs']}</code>{if $hysteria2Node['obfs_password'] != ''} 密码：<code class="card-tag tag-gold">{$hysteria2Node['obfs_password']}</code>{/if}</p>
+                  {/if}
+                  <p>跳过证书验证：<code class="card-tag tag-purple">{if $hysteria2Node['insecure']}是{else}否{/if}</code></p>
                 </div>
               </div>
             </div>

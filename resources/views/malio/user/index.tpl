@@ -343,6 +343,9 @@
                         {if (!in_array("clash",$malio_config['index_hidden_import_buttons']))}
                           <a href="##" class="btn btn-icon icon-left btn-primary btn-clash btn-lg btn-round" onclick="importSublink('clash')"><i class="malio-clash"></i> {$i18n->get('import-clash-config')}</a>
                         {/if}
+                        {if (!in_array("clash",$malio_config['index_hidden_import_buttons']))}
+                          <a href="##" class="btn btn-icon icon-left btn-primary btn-clash copy-text btn-lg btn-round" data-clipboard-text="{$subInfo['clash']}"><i class="malio-clash"></i> 复制 Clash 融合订阅链接</a>
+                        {/if}
                         {/if}
                         
                         {if (in_array("ss",$malio_config['support_sub_type'])) || (in_array("v2ray",$malio_config['support_sub_type']))}
@@ -392,6 +395,12 @@
                         {if (in_array("v2ray",$malio_config['support_sub_type']))}
                         {if (!in_array("v2ray",$malio_config['index_hidden_import_buttons']))}
                           <a href="##" class="btn btn-icon icon-left btn-primary btn-v2ray copy-text btn-lg btn-round" data-clipboard-text="{$subInfo['v2ray']}{if $malio_config['enable_sub_extend'] == true}&extend=1{/if}"><i class="malio-v2rayng"></i> {$i18n->get('copy-v2ray-config-url')}</a>
+                        {/if}
+                        {/if}
+
+                        {if (in_array("hysteria2",$malio_config['support_sub_type']))}
+                        {if (!in_array("hysteria2",$malio_config['index_hidden_import_buttons']))}
+                          <a href="##" class="btn btn-icon icon-left btn-primary btn-v2ray copy-text btn-lg btn-round" data-clipboard-text="{$subInfo['hysteria2']}"><i class="malio-v2rayng"></i> 复制 Hysteria2 原生订阅（非 Clash）</a>
                         {/if}
                         {/if}
                         

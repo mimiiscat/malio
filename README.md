@@ -27,3 +27,12 @@
 
 需要去.config.php打开订阅记录的开关才会记录订阅
 
+## Hysteria2（hy2）支持
+
+本主题已支持 Hysteria2 节点：后台添加节点时节点类型选择“Hysteria2”，订阅会自动生成 Hysteria2 分享链接，Clash Meta / Mihomo 订阅也会自动包含 Hysteria2 节点。
+
+- 原始订阅：`/link/{token}?sub=6`
+- Clash Meta：`/link/{token}?clash=1`
+- 节点地址格式：`地址;port=443|sni=example.com|insecure=1|obfs=salamander|obfs-password=xxx`
+
+详细说明见 [docs/hysteria2.md](docs/hysteria2.md)。

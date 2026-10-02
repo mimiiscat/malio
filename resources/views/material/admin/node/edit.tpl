@@ -26,6 +26,7 @@
                                            value="{$node->server}">
                                     <p class="form-control-guide"><i class="material-icons">info</i>如果填写为域名，“节点IP”会自动设置为解析的IP
                                     </p>
+                                    <p class="form-control-guide"><i class="material-icons">info</i>Hysteria2 节点格式：<code>地址;port=443|sni=example.com|insecure=1|obfs=salamander|obfs-password=xxx|up=100|down=100</code>，除地址外均可省略；auth=passwd 可用用户连接密码作为认证密码</p>
                                 </div>
 
                                 <div class="form-group form-group-label">
@@ -119,6 +120,8 @@
                                             <option value="13" {if $node->sort==13}selected{/if}>Shadowsocks
                                                 V2Ray-Plugin
                                             </option>
+                                            <option value="14" {if $node->sort==14}selected{/if}>Trojan</option>
+                                            <option value="15" {if $node->sort==15}selected{/if}>Hysteria2</option>
                                         </select>
                                     </div>
                                 </div>
@@ -283,4 +286,3 @@
     });
 {/literal}
 </script>
-

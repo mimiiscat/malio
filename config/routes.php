@@ -391,6 +391,10 @@ $app->group('/link', function () {
     $this->get('/{token}', App\Controllers\LinkController::class . ':GetContent');
 });
 
+// Hysteria2 服务端对接（HTTP 认证）
+$app->post('/hysteria2/auth', App\Controllers\Hysteria2Controller::class . ':auth');
+$app->post('/hysteria2/traffic', App\Controllers\Hysteria2Controller::class . ':traffic');
+
 $app->group('/user', function () {
     $this->post('/doiam', App\Services\Payment::class . ':purchase');
 })->add(new Auth());

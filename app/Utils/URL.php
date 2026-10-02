@@ -268,9 +268,15 @@ class URL
             case 'trojan':
                 $sort = [14];
                 break;
+            case 'hy2':
+                $Rule['type'] = 'hysteria2';
+                // no break
+            case 'hysteria2':
+                $sort = [15];
+                break;
             default:
                 $Rule['type'] = 'all';
-                $sort = [0, 10, 11, 12, 13, 14];
+                $sort = [0, 10, 11, 12, 13, 14, 15];
                 break;
         }
         if ($user->is_admin) {
@@ -299,7 +305,7 @@ class URL
             $nodes = $node_query->orderBy('name')->get();
         }
         $return_array = array();
-        if ($is_mu != 0 && $Rule['type'] != 'vmess' && $Rule['type'] != 'trojan') {
+        if ($is_mu != 0 && $Rule['type'] != 'vmess' && $Rule['type'] != 'trojan' && $Rule['type'] != 'hysteria2') {
             $mu_node_query = Node::query();
             $mu_node_query->where('sort', 9)->where('type', '1');
             if ($user->is_admin) {
@@ -365,6 +371,17 @@ class URL
                 if (in_array($node->sort, [14]) && (($Rule['type'] == 'all' && $x == 0) || ($Rule['type'] == 'trojan'))) {
                     // Trojan
                     $item = self::getTrojanItem($user, $node, $emoji);
+                    if ($item != null) {
+                        $find = (isset($Rule['content']['regex']) && $Rule['content']['regex'] != '' ? ConfController::getMatchProxy($item, ['content' => ['regex' => $Rule['content']['regex']]]) : true);
+                        if ($find) {
+                            $return_array[] = $item;
+                        }
+                    }
+                    continue;
+                }
+                if (in_array($node->sort, [15]) && (($Rule['type'] == 'all' && $x == 0) || ($Rule['type'] == 'hysteria2'))) {
+                    // Hysteria2
+                    $item = self::getHysteria2Item($user, $node, $emoji);
                     if ($item != null) {
                         $find = (isset($Rule['content']['regex']) && $Rule['content']['regex'] != '' ? ConfController::getMatchProxy($item, ['content' => ['regex' => $Rule['content']['regex']]]) : true);
                         if ($find) {
@@ -506,6 +523,70 @@ class URL
             $item['host'] = $opt['host'];
         }
         return $item;
+    }
+
+    /**
+     * Hysteria2 节点
+     *
+     * 节点地址格式：地址;port=443|sni=example.com|insecure=1|obfs=salamander|obfs-password=xxx|up=100|down=100
+     *
+     * @param User   $user  用户
+     * @param Node   $node  节点
+     * @param bool   $emoji
+     *
+     * @return array
+     */
+    public static function getHysteria2Item($user, $node, $emoji = false)
+    {
+        $server = explode(';', $node->server);
+        $opt    = [];
+        if (isset($server[1])) {
+            $opt = self::parse_args($server[1]);
+        }
+
+        $item['remark']  = ($emoji == true ? Tools::addEmoji($node->name) : $node->name);
+        $item['type']    = 'hysteria2';
+        $item['address'] = $server[0];
+        $item['port']    = (isset($opt['port']) ? (int) $opt['port'] : 443);
+
+        // 默认使用 uuid 作为认证密码，可用 auth=passwd 改为用户连接密码
+        $item['passwd'] = (isset($opt['auth']) && $opt['auth'] == 'passwd') ? $user->passwd : $user->uuid;
+
+        $item['host'] = (isset($opt['sni']) ? $opt['sni'] : (isset($opt['host']) ? $opt['host'] : $server[0]));
+        $item['insecure'] = (isset($opt['insecure']) ? (bool) (int) $opt['insecure'] : false);
+        $item['obfs'] = (isset($opt['obfs']) ? $opt['obfs'] : '');
+        $item['obfs_password'] = (isset($opt['obfs-password']) ? $opt['obfs-password'] : '');
+        $item['up'] = (isset($opt['up']) ? (int) $opt['up'] : 0);
+        $item['down'] = (isset($opt['down']) ? (int) $opt['down'] : 0);
+        // 客户端 Fast Open 等参数由客户端本地配置，不写入订阅
+
+        $item['class'] = $node->node_class;
+        $item['ratio'] = $node->traffic_rate;
+        return $item;
+    }
+
+    /**
+     * 获取 Hysteria2 全部节点（管理员视角，用于调试）
+     *
+     * @param User $user 用户
+     * @param bool $emoji
+     *
+     * @return array
+     */
+    public static function getAllHysteria2($user, $emoji = false)
+    {
+        $return_array = array();
+        $nodes = Node::where('sort', 15)
+            ->where('type', '1')
+            ->orderBy('name')
+            ->get();
+        foreach ($nodes as $node) {
+            $item = self::getHysteria2Item($user, $node, $emoji);
+            if ($item != null) {
+                $return_array[] = $item;
+            }
+        }
+        return $return_array;
     }
 
     
